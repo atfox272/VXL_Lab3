@@ -1,0 +1,9 @@
+traffic_light_mode.c:30:6:init_fsm_traffic_mode	4	static
+traffic_light_mode.c:33:6:reset_fsm_normal_mode	8	static
+traffic_light_mode.c:39:5:traffic_is_modify_mode	4	static
+traffic_light_mode.c:42:5:traffic_is_normal_mode	4	static
+traffic_light_mode.c:46:6:fsm_normal_mode	8	static
+traffic_light_mode.c:90:6:fsm_modify_mode	24	static
+traffic_light_mode.c:113:6:reset_fsm_modify_mode	8	static
+traffic_light_mode.c:118:5:is_light_num_valid	4	static
+traffic_light_mode.c:121:6:fsm_traffic_light_mode	16	static

@@ -1,0 +1,7 @@
+display.c:15:6:trafficLightOn	16	static
+display.c:49:6:setUpBlinkLed	16	static
+display.c:65:6:blinkLed	16	static
+display.c:81:6:display7SEG	16	static
+display.c:185:6:update7SEG	16	static
+display.c:219:6:set7Seg4BCD	16	static
+display.c:225:6:ledScanningRun	8	static

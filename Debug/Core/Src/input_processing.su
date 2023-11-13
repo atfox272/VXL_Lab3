@@ -1,0 +1,6 @@
+input_processing.c:21:6:reset_buffer	4	static
+input_processing.c:24:5:get_buffer	4	static
+input_processing.c:27:6:incr_buffer	8	static
+input_processing.c:30:6:init_fsm_for_input_processing	16	static
+input_processing.c:36:6:fsm_for_input_processing	16	static
+input_processing.c:70:5:is_button_hold	16	static

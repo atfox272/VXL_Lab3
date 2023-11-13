@@ -1,0 +1,6 @@
+timer.c:16:6:setTimerNormalMode	16	static
+timer.c:20:6:setTimerIncHoldButton	16	static
+timer.c:24:6:setTimerBlinkLed	16	static
+timer.c:28:6:setTimerScanning7Seg	16	static
+timer.c:32:6:init_timer	8	static
+timer.c:38:6:HAL_TIM_PeriodElapsedCallback	16	static
