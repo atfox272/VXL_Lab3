@@ -152,6 +152,7 @@ void fsm_traffic_light_mode(void) {
 		}
 		break;
 	case MODIFY_YELLOW_MODE:
+		fsm_modify_mode(YELLOW_LED);
 		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
 			trafficLightMode = MODIFY_GREEN_MODE;
 			reset_fsm_modify_mode();
@@ -161,6 +162,7 @@ void fsm_traffic_light_mode(void) {
 		}
 		break;
 	case MODIFY_GREEN_MODE:
+		fsm_modify_mode(GREEN_LED);
 		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
 			if(is_light_num_valid()) {
 				trafficLightMode = NORMAL_MODE;

@@ -11,6 +11,9 @@
 enum TrafficLightMode {INIT_MODE = 5, NORMAL_MODE = 1, MODIFY_RED_MODE = 2, MODIFY_YELLOW_MODE = 3, MODIFY_GREEN_MODE = 4, ERROR_MODE = 6};
 enum TrafficLightMode trafficLightMode;
 
+void init_fsm_traffic_mode(void);
+void fsm_traffic_light_mode(void);
+
 int traffic_is_modify_mode(void);
 int traffic_is_normal_mode(void);
 

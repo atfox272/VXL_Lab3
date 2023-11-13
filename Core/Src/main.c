@@ -19,11 +19,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "traffic_light_mode.h"
 #include "defination.h"
 #include "timer.h"
-#include "input_processing.h"
-#include "input_reading.h"
 #include "display.h"
+#include "input_processing.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -177,6 +177,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim2);
   init_fsm_for_input_processing();
   init_timer();
+  init_fsm_traffic_mode();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -201,6 +202,7 @@ int main(void)
 		  fsm_for_input_processing(button_index);
 	  }
 	  ledScanningRun();
+	  fsm_traffic_light_mode();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
