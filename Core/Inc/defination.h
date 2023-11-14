@@ -19,14 +19,14 @@
 #define N0_OF_BUTTONS 	3
 
 #define RED_LIGHT_LIMIT 		4		// Counting 5s
-#define YELLOW_LIGHT_LIMIT 		2		// Counting 3s
-#define GREEN_LIGHT_LIMIT 		1		// Counting 2s
+#define YELLOW_LIGHT_LIMIT 		1		// Counting 2s
+#define GREEN_LIGHT_LIMIT 		2		// Counting 3s
 
 #define BUFFER_LIMIT			100		// 7Seg limitation
 
 /* Timer */
 #define INC_HOLD_DURATION		400		// 0.4s
-#define SCANNING_DURATION		50		// 0.05s
+#define SCANNING_DURATION		40		// 0.05s
 /* Display */
 enum LightDecode {
 	RED1,

@@ -17,9 +17,13 @@ enum ButtonState{BUTTON_RELEASED, BUTTON_PRESSED, BUTTON_PRESSED_MORE_THAN_1_SEC
 enum ButtonState buttonState[N0_OF_BUTTONS];
 
 int buffer_value;
+int button_pressed_flag[N0_OF_BUTTONS];
 
 void reset_buffer(void) {
 	buffer_value = 0;
+	for(int index = 0; index < N0_OF_BUTTONS; index++) {
+		button_pressed_flag[index] = 0;
+	}
 }
 int get_buffer(void) {
 	return buffer_value;
@@ -42,6 +46,7 @@ void fsm_for_input_processing(unsigned char index){
 			if(index == MODIFY_BUTTON_ENCODE) {
 				incr_buffer();
 			}
+			button_pressed_flag[index] = 1;
 		}
 		break;
 	case BUTTON_PRESSED:
@@ -51,6 +56,9 @@ void fsm_for_input_processing(unsigned char index){
 			if(is_button_pressed_1s(index)){
 				buttonState[index] = BUTTON_PRESSED_MORE_THAN_1_SECOND;
 				if(index == MODIFY_BUTTON_ENCODE) setTimerIncHoldButton(INC_HOLD_DURATION);
+				else if(index == MODIFY_BUTTON_ENCODE) {
+				// Not process
+				}
 			}
 		}
 		break;
@@ -64,10 +72,18 @@ void fsm_for_input_processing(unsigned char index){
 				incr_buffer();
 			}
 		}
+		else if(index == MODIFY_BUTTON_ENCODE) {
+		// Not process
+		}
 		break;
 	}
 }
 int is_button_hold(unsigned char index) {
 	return (buttonState[index] == BUTTON_PRESSED_MORE_THAN_1_SECOND);
 }
-
+// To: Clear flag when button is pressed
+char is_button_state_press(unsigned char index) {
+	int temp = button_pressed_flag[index];
+	button_pressed_flag[index] = 0;
+	return temp;
+}

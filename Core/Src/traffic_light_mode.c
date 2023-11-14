@@ -23,9 +23,9 @@ enum NormalModeState {
 enum NormalModeState normalModeState = RED_GREEN;
 int firstWayCounter;
 int secondWayCounter;
-int redCountDown = RED_LIGHT_LIMIT * SECOND_UNIT;
-int yelCountDown = YELLOW_LIGHT_LIMIT * SECOND_UNIT;
-int greCountDown = GREEN_LIGHT_LIMIT * SECOND_UNIT;
+int redCountDown = RED_LIGHT_LIMIT;
+int yelCountDown = YELLOW_LIGHT_LIMIT;
+int greCountDown = GREEN_LIGHT_LIMIT;
 
 void init_fsm_traffic_mode(void) {
 	trafficLightMode = INIT_MODE;
@@ -37,7 +37,7 @@ void reset_fsm_normal_mode(void) {
 	secondWayCounter = greCountDown;
 }
 int traffic_is_modify_mode(void) {
-	return (trafficLightMode == MODIFY_RED_MODE && trafficLightMode == MODIFY_YELLOW_MODE && trafficLightMode == MODIFY_GREEN_MODE);
+	return (trafficLightMode == MODIFY_RED_MODE || trafficLightMode == MODIFY_YELLOW_MODE || trafficLightMode == MODIFY_GREEN_MODE);
 }
 int traffic_is_normal_mode(void) {
 	return (trafficLightMode == NORMAL_MODE);
@@ -51,7 +51,7 @@ void fsm_normal_mode(void) {
 	}
 	switch(normalModeState) {
 	case RED_GREEN:
-		if(secondWayCounter == -1) {
+		if(secondWayCounter <= -1) {
 			normalModeState = RED_YELLOW;
 			trafficLightOn(RED1);
 			trafficLightOn(YELLOW2);
@@ -59,7 +59,7 @@ void fsm_normal_mode(void) {
 		}
 		break;
 	case RED_YELLOW:
-		if(secondWayCounter == -1) {
+		if(secondWayCounter <= -1) {
 			normalModeState = GREEN_RED;
 			trafficLightOn(GREEN1);
 			trafficLightOn(RED2);
@@ -68,7 +68,7 @@ void fsm_normal_mode(void) {
 		}
 		break;
 	case GREEN_RED:
-		if(firstWayCounter == -1) {
+		if(firstWayCounter <= -1) {
 			normalModeState = YELLOW_RED;
 			trafficLightOn(YELLOW1);
 			trafficLightOn(RED2);
@@ -76,7 +76,7 @@ void fsm_normal_mode(void) {
 		}
 		break;
 	case YELLOW_RED:
-		if(firstWayCounter == -1) {
+		if(firstWayCounter <= -1) {
 			normalModeState = RED_GREEN;
 			trafficLightOn(RED1);
 			trafficLightOn(GREEN2);
@@ -89,17 +89,17 @@ void fsm_normal_mode(void) {
 }
 void fsm_modify_mode(enum ColorDecode colorDecode) {
 	if(colorDecode == RED_LED) {
-		if(is_button_pressed(SET_BUTTON_ENCODE)) {
+		if(is_button_state_press(SET_BUTTON_ENCODE)) {
 			redCountDown = get_buffer();
 		}
 	}
 	else if (colorDecode == YELLOW_LED) {
-		if(is_button_pressed(SET_BUTTON_ENCODE)) {
+		if(is_button_state_press(SET_BUTTON_ENCODE)) {
 			yelCountDown = get_buffer();
 		}
 	}
 	else if (colorDecode == GREEN_LED) {
-		if(is_button_pressed(SET_BUTTON_ENCODE)) {
+		if(is_button_state_press(SET_BUTTON_ENCODE)) {
 			greCountDown = get_buffer();
 		}
 	}
@@ -123,17 +123,18 @@ void fsm_traffic_light_mode(void) {
 	case INIT_MODE:
 		trafficLightMode = NORMAL_MODE;
 		init_timer();
-		redCountDown = RED_LIGHT_LIMIT * SECOND_UNIT;
-		yelCountDown = YELLOW_LIGHT_LIMIT * SECOND_UNIT;
-		greCountDown = GREEN_LIGHT_LIMIT * SECOND_UNIT;
+		redCountDown = RED_LIGHT_LIMIT;
+		yelCountDown = YELLOW_LIGHT_LIMIT;
+		greCountDown = GREEN_LIGHT_LIMIT;
 		trafficLightOn(RED1);
 		trafficLightOn(GREEN2);
+		reset_buffer();
 		reset_fsm_normal_mode();
 		set7Seg4BCD(firstWayCounter, secondWayCounter);
 		break;
 	case NORMAL_MODE:
 		fsm_normal_mode();
-		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
+		if(is_button_state_press(MODE_BUTTON_ENCODE)) {
 			trafficLightMode = MODIFY_RED_MODE;
 			reset_fsm_normal_mode();
 			setUpBlinkLed(RED_LED);
@@ -143,7 +144,7 @@ void fsm_traffic_light_mode(void) {
 		break;
 	case MODIFY_RED_MODE:
 		fsm_modify_mode(RED_LED);
-		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
+		if(is_button_state_press(MODE_BUTTON_ENCODE)) {
 			trafficLightMode = MODIFY_YELLOW_MODE;
 			reset_fsm_modify_mode();
 			setUpBlinkLed(YELLOW_LED);
@@ -153,7 +154,7 @@ void fsm_traffic_light_mode(void) {
 		break;
 	case MODIFY_YELLOW_MODE:
 		fsm_modify_mode(YELLOW_LED);
-		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
+		if(is_button_state_press(MODE_BUTTON_ENCODE)) {
 			trafficLightMode = MODIFY_GREEN_MODE;
 			reset_fsm_modify_mode();
 			setUpBlinkLed(GREEN_LED);
@@ -163,7 +164,7 @@ void fsm_traffic_light_mode(void) {
 		break;
 	case MODIFY_GREEN_MODE:
 		fsm_modify_mode(GREEN_LED);
-		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
+		if(is_button_state_press(MODE_BUTTON_ENCODE)) {
 			if(is_light_num_valid()) {
 				trafficLightMode = NORMAL_MODE;
 				trafficLightOn(RED1);
@@ -179,7 +180,9 @@ void fsm_traffic_light_mode(void) {
 		}
 		break;
 	case ERROR_MODE:
-		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
+		// 4 BCD will be 9 - 9 - 9 - 9
+		// To get out this state, user need to press MODE button (All parameter will be reset)
+		if(is_button_state_press(MODE_BUTTON_ENCODE)) {
 			trafficLightMode = INIT_MODE;
 		}
 		break;

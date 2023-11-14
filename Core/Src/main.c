@@ -61,101 +61,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0  */
 
-//int timerFlagNormalMode;
-//int timerCounterNormalMode;
-//void setTimerNormalMode(int num){
-//	timerFlagNormalMode = 0;
-//	timerCounterNormalMode = num / TIMER_CYCLE;
-//}
-//enum TrafficLightMode {
-//	INIT_MODE,
-//	NORMAL_MODE,
-//	MODIFY_RED_MODE,
-//	MODIFY_YEL_MODE,
-//	MODIFY_GRE_MODE
-//};
-//
-//enum TrafficLightMode trafficLightMode = INIT_MODE;
-//
-//int redCountDown = RED_LIGHT_LIMIT * SECOND_UNIT;
-//int yelCountDown = YELLOW_LIGHT_LIMIT * SECOND_UNIT;
-//int greCountDown = GREEN_LIGHT_LIMIT * SECOND_UNIT;
-//
-//enum NormalModeState {
-//	INIT_STATE,
-//	RED_GRE_STATE,
-//	RED_YEL_STATE,
-//	GRE_RED_STATE,
-//	YEL_RED_STATE
-//};
-//
-//enum NormalModeState normalModeState = INIT_STATE;
-//
-//void fsm_of_normal_mode(void) {
-//	switch(normalModeState) {
-//	case INIT_STATE:
-//		normalModeState = RED_GRE_STATE;
-//		setTimerNormalMode(greCountDown);
-//		break;
-//	case RED_GRE_STATE:
-//
-//		if(timerFlagNormalMode) {
-//			normalModeState = RED_YEL_STATE;
-//			setTimerNormalMode(yelCountDown);
-//		}
-//		break;
-//	case RED_YEL_STATE:
-//
-//		if(timerFlagNormalMode) {
-//			normalModeState = GRE_RED_STATE;
-//			setTimerNormalMode(greCountDown);
-//		}
-//		break;
-//	case GRE_RED_STATE:
-//
-//		if(timerFlagNormalMode) {
-//			normalModeState = YEL_RED_STATE;
-//			setTimerNormalMode(yelCountDown);
-//		}
-//		break;
-//	case YEL_RED_STATE:
-//
-//		if(timerFlagNormalMode) {
-//			normalModeState = RED_GRE_STATE;
-//			setTimerNormalMode(greCountDown);
-//		}
-//		break;
-//
-//	}
-//}
-//
-//void fsm_for_traffic_light(void) {
-//	switch(trafficLightMode) {
-//	case INIT_MODE:
-//		trafficLightMode = NORMAL_MODE;
-//		break;
-//	case NORMAL_MODE:
-//
-//		break;
-//	case MODIFY_RED_MODE:
-//
-//		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
-//
-//		}
-//		break;
-//	case MODIFY_YEL_MODE:
-//
-//		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
-//
-//		}
-//		break;
-//	case MODIFY_GRE_MODE:
-//		if(is_button_pressed(MODE_BUTTON_ENCODE)) {
-//
-//		}
-//		break;
-//	}
-//}
 /* USER CODE END 0 */
 
 /**
@@ -174,10 +79,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  HAL_TIM_Base_Start_IT(&htim2);
-  init_fsm_for_input_processing();
-  init_timer();
-  init_fsm_traffic_mode();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -191,7 +93,10 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_Base_Start_IT(&htim2);
+  init_timer();
+  init_fsm_for_input_processing();
+  init_fsm_traffic_mode();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -341,11 +246,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-//	if(htim->Instance == TIM2){
-//		button_reading();
-//	}
-//}
+
 /* USER CODE END 4 */
 
 /**

@@ -15,4 +15,6 @@ int  get_buffer(void);
 void incr_buffer(void);
 int is_button_hold(unsigned char index);
 
+char is_button_state_press(unsigned char index);
+
 #endif /* INC_INPUT_PROCESSING_H_ */
